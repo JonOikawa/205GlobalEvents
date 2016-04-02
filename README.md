@@ -1,7 +1,10 @@
 Installation
 -----------
 1. - `cd tweepy` cd into the tweepy directory
-2. - `py setup.py` install tweepy
+2. - `py setup.py install` install tweepy
+3. - `pip install plotly` install plot.ly via pip
+4. - `python -c "import plotly; plotly.tools.set_credentials_file(username='JonOikawa', api_key='5b2faeqo2i')"` credentials for using plot.ly
+
 
 Potential Future Additions (Twitter)
 ---------------
@@ -43,7 +46,7 @@ More details can be found on Twitter's [site](https://dev.twitter.com/streaming/
 Running the Program
 -------------------
 Run it from command line with the following command:  
-`py events.py TRACK_TERM_1 TRACK_TERM_2`
+`py events.py TRACK_TERM_1 TRACK_TERM_2 ...`
 
 This will start tracking the search term for all tweets from the start of the program in real-time, and all Instagrams starting from that time moving backward (currently working to see if we can get them in real-time as well, but still works as it will only go back in time a few minutes usually).
 
@@ -105,4 +108,5 @@ Each individual Instagram post has a data structure that looks like this:
 Current Issues
 --------------
 1. Attempting to print out emojis throws an error as there is no encoding for them the charmap of UTF-8.
-2. Rate Limiting Errors for Twitter, and HTTP Error 429 - Too Many Requests for Instagram
+2. Rate Limiting Errors for Twitter, and HTTP Error 429 - Too Many Requests for Instagram.
+3. The plot.ly API automatically prints out some data when the graph is being created.

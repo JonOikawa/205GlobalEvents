@@ -10,6 +10,10 @@ import json
 import time
 import urllib.request
 
+# Import libraries for plotting on graphs
+import plotly.plotly as py
+import plotly.graph_objs as go
+
 # Twitter API access keys. There are two sets so that we can access twice as many without getting Rate Limiting Errors
 consumer_key = ["4mSPfcXaSASQiR1FIZ5ccc0tB", "YS0KGexQmvlJhGqHUfrNey7ks"]
 consumer_secret = ["U8VzCgpKjFwf0qUCik4s3VefQCjZY6g0g6mHOKw7CMeVTHw7xy", "VXVFCGQrzc8syovgscnU8U6C7mYU0886HTz2JGSSlJnI8l57Ru"]
@@ -31,6 +35,9 @@ stdOuts = []
 
 # This is how long we will run our program for in seconds
 RUN_TIME = 60
+
+# Interval to tell user that time has passed
+INTERVAL_DURATION = 5
 
 # Catch the StdOut for the Stream, and redirect the data so that we can mine it
 class StdOutListener(StreamListener):
@@ -149,6 +156,7 @@ def getInstaPosts(searchTag):
             instagrams.append(instaData)
 
 startTime = time.time()
+nextInterval = INTERVAL_DURATION
 
 # Delete the first sys.argv, which is the file name (events.py). Simply
 # makes it easier to iterate.
@@ -168,9 +176,16 @@ for term in sys.argv:
 
 # Iterate until all threads have ended (all have run for RUN_TIME)
 while len(threads) > 0:
+    if startTime + nextInterval < time.time():
+        print("Process has been running for " + str(nextInterval) + " of " + str(RUN_TIME) + " seconds...")
+        nextInterval += INTERVAL_DURATION
     for thread in threads:
         if not thread.isAlive():
             del(threads[threads.index(thread)])
+
+# Store data for our graphs
+tweetsPerMinute = []
+instagramsPerMinute = []
 
 # For each term, iterate through their respective lists and print out some stats
 for arg in sys.argv:
@@ -181,4 +196,31 @@ for arg in sys.argv:
     newestPostTime = int(totalInstagrams[index][0]['created_time'])
     oldestPostTime = int(totalInstagrams[index][len(totalInstagrams[index]) - 1]['created_time'])
 
-    print(arg + ": " + str(tweetCount*60/RUN_TIME) + " tweets per minute. " + str(instaCount*60/((newestPostTime - oldestPostTime)/1000)) + " instas per minute.")
+    tweetsPerMinute.append(tweetCount*60/RUN_TIME)
+    instagramsPerMinute.append(instaCount*60/((newestPostTime - oldestPostTime)/1000))
+
+# Create data structures for our graphing library
+twitter = go.Bar(
+    x=sys.argv,
+    y=tweetsPerMinute,
+    name='Twitter'
+)
+
+instagram = go.Bar(
+    x=sys.argv,
+    y=instagramsPerMinute,
+    name='Instagram'
+)
+
+data = [twitter, instagram]
+layout = go.Layout(
+    barmode='stack',
+    title='Social Media Mentions',
+    yaxis= dict(
+        title='Mentions (per minute)',
+    ),
+)
+
+# Create graphs to visualize our data
+fig = go.Figure(data=data, layout=layout)
+plot_url = py.plot(fig, filename='stacked-bar')
