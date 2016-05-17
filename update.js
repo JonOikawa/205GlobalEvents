@@ -27,8 +27,6 @@ $.get('negative.txt', function(data) {
     }
 });
 
-
-
 function initializeStructure(structure, searchTerm) {
   structure["searchTerm"] = searchTerm;
   structure["tweetIds"] = [];
@@ -83,34 +81,42 @@ function updateCountryColors(countryCode, number) {
 
 $(window).keypress(function(e) {
   if (e.which == 13) {
-    if ($("#search").is(":focus") && searchTerms.length < 4) {
+    // If we press enter, our search bar is focused, and we not have 3 terms already
+    if ($("#search").is(":focus") && searchTerms.length < 3) {
+      // Add the new search term to the list
       var newSearchTerm = $("#search").val();
+      searchTerms.push(newSearchTerm.toLowerCase())
 
+      // Add the new structure
       var structure = new Object();
       initializeStructure(structure, newSearchTerm);
       structures.push(structure);
 
+      // Start both the twitter and instagram APIs for that term
       $.get("/start/twitter/" + newSearchTerm, function(data) {
       });
-
 
       $.get("/start/instagram/" + newSearchTerm, function(data) {
       });
 
-      searchTerms.push(newSearchTerm.toLowerCase())
+      // Change what we are viewing stats to be the most recent.
       currentlySelectedStructure = structures[searchTerms.length - 1];
 
+      // Clear the search result and update our current terms
       $("#search").val('');
       $("#current-terms").text("Current search terms: " + searchTerms);
 
+      // Add a new bar to the graph
       $("#graph").append('<div class="bar""></div><div class="percentage">0%</div><div class="search-term">' + newSearchTerm.toUpperCase() + '</div>');
 
+      // Add the function to switch between terms
       $(".search-term").click(function() {
         var term = $(this).html().toLowerCase();
         var index = searchTerms.indexOf(term);
         currentlySelectedStructure = structures[index];
       });
 
+      // Rough dynamic CSS for the bars to change sizes
       $(".bar:nth-child(even)").css("background-color", "#006BB6");
       $(".bar:nth-child(odd)").css("background-color", "#FDB927");
       if (searchTerms.length > 1) {
@@ -143,16 +149,16 @@ $(window).keypress(function(e) {
   }
 })
 
+// Get the tone of the text strings we get
 function getTone(message) {
   var words = message.split(" ");
-  var wordsLength = words.length;
 
   var newString = "";
 
   var pos = 0;
   var neg = 0;
 
-
+  // Check if the words are in either of the lists
   for (wordIndex in words) {
     if ($.inArray(words[wordIndex], positiveWords) > -1) {
       pos += 1;
@@ -161,6 +167,7 @@ function getTone(message) {
     }
   }
 
+  // If we have more positive than negative, it's positive and we return 1, etc.
   if (pos > neg) {
     return 1;
   } else if (neg > pos) {
@@ -170,6 +177,7 @@ function getTone(message) {
   }
 }
 
+// Call to Google Maps API to get the country code. If we don't get anything, return "N/A" to be handled. Used mostly for Instagram
 function getCountry(latitude, longitude) {
   $.get("http://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&sensor=false", function(data) {
     if (data["status"] == "OK") {
@@ -185,6 +193,7 @@ function getCountry(latitude, longitude) {
   });
 }
 
+// Similar method to the one above, but is used specifically for Twitter
 function addLocation(msg) {
   var countryCode = "";
 
@@ -194,14 +203,15 @@ function addLocation(msg) {
     countryCode = msg["place"]["country_code"];
     addCountry(countryCode);
   }
-
 }
 
+// Once we have the country code, at it to our list
 function addCountry(countryCode) {
   if (countryCode == "N/A") {
     return 0;
   }
 
+  // Certain codes don't map to our maps codes
   if (countryCode == "HK") {
     countryCode = "CN";
   }
@@ -219,8 +229,11 @@ function addCountry(countryCode) {
   updateCountryColors(countryCode, countryNumbers[countryCode]);
 }
 
+// For both instagrams and tweets, we scan the broadcast on the socket for certain terms
 socket.on('New insta', function(msg) {
   for (index in structures) {
+    // Given a new insta, we check to see which search term it matches to.
+    // Once we have the correct structure, we add in all sorts of data to it
     if (msg["st"] == structures[index]["searchTerm"]) {
       structures[index]["oldestInsta"] = msg["created_time"];
       structures[index]["totalInstaLength"] += msg["caption"]["text"].length;
@@ -249,6 +262,7 @@ socket.on('New insta', function(msg) {
   }
 });
 
+// Similar to the Instagram .on function
 socket.on('New tweet', function(msg){
   for (index in structures) {
     if (msg["st"] == structures[index]["searchTerm"]) {
@@ -279,7 +293,9 @@ socket.on('New tweet', function(msg){
   }
 });
 
+// Every 250 milliseconds we update all of the information
 setInterval(function() {
+  // If we don't have any structures yet, we don't do anything
   if (!currentlySelectedStructure) {
     return;
   }

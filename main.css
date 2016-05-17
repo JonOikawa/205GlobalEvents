@@ -96,11 +96,6 @@ path {
   color: white;
 }
 
-
-
-
-
-
 #extra-information {
   position: absolute;
   margin-top: 200vh;
@@ -109,7 +104,7 @@ path {
   font-size: 30px;
   background-color: white;
   text-align: center;
-  background: url("bokeh.jpg");
+  background: url("media/bokeh.jpg");
   background-size: cover;
   color: white;
 }
@@ -130,5 +125,5 @@ path {
 
 @font-face {
   font-family: AP;
-  src: url('AP.ttf');
+  src: url('media/AP.ttf');
 }
