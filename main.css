@@ -1,0 +1,134 @@
+body, html {
+  overflow-x: hidden;
+  margin: 0;
+  font-family: AP;
+  color: white;
+  background-color: #CCCCCC;
+}
+
+#search {
+  margin-top: 25px;
+}
+
+#current-terms {
+  font-size: 30px;
+  margin-top: 20px;
+}
+
+#splash {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  background: url('http://i.imgur.com/frrB81S.gif');
+  background-size: cover;
+  background-repeat: no-repeat;
+  text-align: center;
+  color: black;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#title {
+  margin-top: calc(30vh - 250px);
+  font-size: 80px;
+  color: white;
+}
+
+#subtitle {
+  font-size: 35px;
+}
+
+#search {
+  font-size: 45px;
+}
+
+path {
+  cursor: pointer;
+}
+
+#graph {
+  position: absolute;
+  margin-top: 100vh;
+  height: 100vh;
+  width: 1600px;
+  margin-left: calc(50vw - 800px);
+  background-color: white;
+}
+
+.bar {
+  position: relative;
+  float: left;
+  width: 100%;
+  height: 200px;
+  margin-top: calc(100vh - 200px);
+  background-color: #FDB927;
+  color: black;
+  text-align: center;
+  font-size: 45px;
+  background-color: #0066ff;
+}
+
+.percentage {
+  position: absolute;
+  float:left;
+  width: 100%;
+  color: black;
+  text-align: center;
+  z-index: 1;
+  font-size: 45px;
+}
+
+.search-term {
+  cursor: pointer;
+  position: absolute;
+  float: left;
+  width: 100%;
+  margin-top: calc(100vh - 55px);
+  color: black;
+  text-align: center;
+  font-size: 45px;
+  z-index: 1;
+}
+
+.search-term:hover {
+  color: white;
+}
+
+
+
+
+
+
+#extra-information {
+  position: absolute;
+  margin-top: 200vh;
+  height: 100vh;
+  width: 100vw;
+  font-size: 30px;
+  background-color: white;
+  text-align: center;
+  background: url("bokeh.jpg");
+  background-size: cover;
+  color: white;
+}
+
+.information {
+  color: white;
+  font-size: 50px;
+}
+
+#world {
+  position:absolute;
+  margin-top: 300vh;
+  height: 100vh;
+  width: 100vw;
+  background-color: #0099ff;
+}
+
+
+@font-face {
+  font-family: AP;
+  src: url('AP.ttf');
+}
