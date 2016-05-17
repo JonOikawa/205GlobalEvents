@@ -8,9 +8,11 @@ There will be conflicts if you have something else running on port 3000 of you c
 
 The Team
 ----------
-Dario Molina - Sentiment analysis, location detection, initial FaceBook work, second part of Twitter work
-Jon Oikawa - Initial Twitter work, integration of Twitter/Instagram, UI/UX, hosting, translating of Python to JavaScript
-Igor Racca - Sentiment analysis, location detection, all of Instagram work
+-Dario Molina - Sentiment analysis, location detection, initial FaceBook work, second part of Twitter work
+
+-Jon Oikawa - Initial Twitter work, integration of Twitter/Instagram, UI/UX, hosting, translating of Python to JavaScript
+
+-Igor Racca - Sentiment analysis, location detection, all of Instagram work
 
 Contact
 ----------
