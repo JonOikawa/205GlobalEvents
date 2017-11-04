@@ -12,7 +12,7 @@ The Team
 
 -Jon Oikawa - Initial Twitter work, integration of Twitter/Instagram, UI/UX, hosting, translating of Python to JavaScript
 
--Igor Racca - Sentiment analysis, location detection, all of Instagram work
+-Igor Racca - Location detection, all of Instagram work
 
 Contact
 ----------
